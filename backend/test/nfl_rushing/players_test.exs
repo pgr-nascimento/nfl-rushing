@@ -149,23 +149,5 @@ defmodule NflRushing.PlayersTest do
 
       assert [^player2, ^player1, ^player3] = result
     end
-
-    test "when it receives an invalid field to order, it should returns the players with default ordenation",
-         %{
-           players: [player1, player2, player3]
-         } do
-      result = Players.all(%{order_by: "name"})
-
-      assert [^player1, ^player2, ^player3] = result
-    end
-
-    test "when it receives an invalid field to order and a direction, it should returns the players with default ordenation but use the direction specified",
-         %{
-           players: [player1, player2, player3]
-         } do
-      result = Players.all(%{order_by: "name", direction: "desc"})
-
-      assert [^player3, ^player2, ^player1] = result
-    end
   end
 end
