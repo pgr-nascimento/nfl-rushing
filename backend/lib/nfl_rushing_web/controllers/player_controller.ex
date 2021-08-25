@@ -3,8 +3,10 @@ defmodule NflRushingWeb.PlayerController do
 
   alias NflRushing.Players
 
-  def index(conn, _params) do
-    players = Players.list_all()
+  def index(conn, params) do
+    players =
+      params
+      |> Players.all()
 
     render(conn, "players.json", %{players: players})
   end
