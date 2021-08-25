@@ -9,8 +9,15 @@ defmodule NflRushing.Players do
   @doc """
   It returns all players from database or return an empty list
   """
-  def all(_params) do
+  def all(params) do
     base_query()
+    |> filter_query(params)
     |> Repo.all()
   end
+
+  defp filter_query(query, %{"name" => name}) do
+    where(query, [player], ilike(player.name, ^"%#{name}%"))
+  end
+
+  defp filter_query(query, _params), do: query
 end
