@@ -70,4 +70,16 @@ defmodule NflRushing.PlayersTest do
       refute Enum.find(result, fn p -> p.name == player2.name end)
     end
   end
+
+  describe "orders" do
+    test "when it receives a value, should order the players using the param" do
+      player1 = insert(:player, %{name: "Joe Cavalera", total_yards: 200.0})
+      player2 = insert(:player, %{name: "Joe Doe", total_yards: 202.0})
+      player3 = insert(:player, %{name: "Sebastian Edgard", total_yards: 198.0})
+
+      result = Players.all(%{"order_by" => "total_yards"})
+
+      assert [^player3, ^player1, ^player2] = result
+    end
+  end
 end

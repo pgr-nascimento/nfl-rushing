@@ -12,6 +12,7 @@ defmodule NflRushing.Players do
   def all(params) do
     base_query()
     |> filter_query(params)
+    |> order_query(params)
     |> Repo.all()
   end
 
@@ -20,4 +21,10 @@ defmodule NflRushing.Players do
   end
 
   defp filter_query(query, _params), do: query
+
+  defp order_query(query, %{"order_by" => field}) do
+    field = String.to_existing_atom(field)
+
+    from p in query, order_by: ^field
+  end
 end
