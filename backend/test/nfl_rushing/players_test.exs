@@ -71,18 +71,58 @@ defmodule NflRushing.PlayersTest do
     end
   end
 
-  describe "orders" do
-    test "when it receives a value, should order the players using the param" do
+  describe "ordering" do
+    test "when it receives an empty value, should ordering by default (id)" do
+      player1 = insert(:player, %{name: "Joe Cavalera"})
+      player2 = insert(:player, %{name: "Alan Doe"})
+      player3 = insert(:player, %{name: "Sebastian Edgard"})
+
+      result = Players.all(%{"order_by" => ""})
+
+      assert [^player1, ^player2, ^player3] = result
+    end
+
+    test "when it receives a valid field to order, should order the players using the field" do
       player1 = insert(:player, %{name: "Joe Cavalera", total_yards: 200.0})
       player2 = insert(:player, %{name: "Joe Doe", total_yards: 202.0})
       player3 = insert(:player, %{name: "Sebastian Edgard", total_yards: 198.0})
 
       field = draw_ordered_field()
 
-      expected = sort_players_by_field([player1, player2, player3], field)
+      ordered_players = sort_players_by_field([player1, player2, player3], field)
       result = Players.all(%{"order_by" => field})
 
-      assert ^expected = result
+      assert ^ordered_players = result
+    end
+
+    test "when it receives an invalid field to order, it should returns the players with default ordenation" do
+      player1 =
+        insert(:player, %{
+          name: "Joe Cavalera",
+          total_yards: 200.0,
+          longest_rush: 10,
+          total_touchdowns: 5
+        })
+
+      player2 =
+        insert(:player, %{
+          name: "Alan Doe",
+          total_yards: 202.0,
+          longest_rush: 12,
+          total_touchdowns: 8
+        })
+
+      player3 =
+        insert(:player, %{
+          name: "Sebastian Edgard",
+          total_yards: 198.0,
+          longest_rush: 8,
+          total_touchdowns: 3
+        })
+
+      result = Players.all(%{"order_by" => "name"})
+
+      assert [^player1, ^player2, ^player3] = result
     end
   end
 

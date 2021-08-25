@@ -2,6 +2,8 @@ defmodule NflRushing.Players do
   alias NflRushing.{Player, Repo}
   import Ecto.Query
 
+  @possible_fields ["total_yards", "longest_rush", "total_touchdowns"]
+
   defp base_query do
     from(p in Player)
   end
@@ -22,9 +24,11 @@ defmodule NflRushing.Players do
 
   defp filter_query(query, _params), do: query
 
-  defp order_query(query, %{"order_by" => field}) do
+  defp order_query(query, %{"order_by" => field}) when field in @possible_fields do
     field = String.to_existing_atom(field)
 
     from p in query, order_by: ^field
   end
+
+  defp order_query(query, _params), do: query
 end
