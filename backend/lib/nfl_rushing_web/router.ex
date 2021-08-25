@@ -6,7 +6,9 @@ defmodule NflRushingWeb.Router do
   end
 
   scope "/api", NflRushingWeb do
-    pipe_through :api
+    pipe_through(:api)
+
+    get "/players", PlayerController, :index
   end
 
   # Enables LiveDashboard only for development
