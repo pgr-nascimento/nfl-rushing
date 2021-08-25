@@ -6,9 +6,9 @@ defmodule NflRushingWeb.PlayerController do
   def index(conn, params) do
     players =
       %{
-        "name" => Map.get(params, "name", ""),
-        "order_by" => Map.get(params, "order_by", ""),
-        "direction" => Map.get(params, "direction", "asc")
+        name: Map.get(params, "name", ""),
+        order_by: Map.get(params, "order_by", ""),
+        direction: Map.get(params, "direction", "asc")
       }
       |> Players.all()
 

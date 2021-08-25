@@ -18,13 +18,13 @@ defmodule NflRushing.Players do
     |> Repo.all()
   end
 
-  defp filter_query(query, %{"name" => name}) do
+  defp filter_query(query, %{name: name}) do
     where(query, [player], ilike(player.name, ^"%#{name}%"))
   end
 
   defp filter_query(query, _params), do: query
 
-  defp order_query(query, %{"order_by" => field, "direction" => direction})
+  defp order_query(query, %{order_by: field, direction: direction})
        when field in @possible_fields do
     field = String.to_existing_atom(field)
     direction = String.to_existing_atom(direction)
@@ -32,7 +32,7 @@ defmodule NflRushing.Players do
     from p in query, order_by: {^direction, ^field}
   end
 
-  defp order_query(query, %{"order_by" => _invalid_field, "direction" => direction}) do
+  defp order_query(query, %{order_by: _invalid_field, direction: direction}) do
     direction = String.to_existing_atom(direction)
 
     from p in query, order_by: {^direction, p.id}
