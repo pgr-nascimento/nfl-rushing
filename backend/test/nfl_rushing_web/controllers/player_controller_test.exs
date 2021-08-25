@@ -73,4 +73,73 @@ defmodule NflRushingWeb.PlayerControllerTest do
                response
     end
   end
+
+  describe "GET /api/players?order_by=player_stats" do
+    setup %{conn: conn} do
+      insert(:player, %{
+        name: "Joe Cavalera",
+        total_yards: 200.0,
+        longest_rush: 10,
+        total_touchdowns: 5
+      })
+
+      insert(:player, %{
+        name: "Joe Doe",
+        total_yards: 202.0,
+        longest_rush: 12,
+        total_touchdowns: 8
+      })
+
+      insert(:player, %{
+        name: "Sebastian Edgard",
+        total_yards: 198.0,
+        longest_rush: 8,
+        total_touchdowns: 3
+      })
+
+      {:ok, conn: conn}
+    end
+
+    test "when receives a valid ordered field and direction, order the players using they", %{
+      conn: conn
+    } do
+      response =
+        conn
+        |> get("/api/players?order_by=total_yards&direction=desc")
+        |> json_response(:ok)
+
+      assert [
+               %{"name" => "Joe Doe"},
+               %{"name" => "Joe Cavalera"},
+               %{"name" => "Sebastian Edgard"}
+             ] = response
+    end
+
+    test "when receives a invalid ordered field, order the players default", %{conn: conn} do
+      response =
+        conn
+        |> get("/api/players?order_by=name")
+        |> json_response(:ok)
+
+      assert [
+               %{"name" => "Joe Cavalera"},
+               %{"name" => "Joe Doe"},
+               %{"name" => "Sebastian Edgard"}
+             ] = response
+    end
+
+    test "when receives a invalid ordered field with direction, order the players default using the direction",
+         %{conn: conn} do
+      response =
+        conn
+        |> get("/api/players?order_by=name&direction=desc")
+        |> json_response(:ok)
+
+      assert [
+               %{"name" => "Sebastian Edgard"},
+               %{"name" => "Joe Doe"},
+               %{"name" => "Joe Cavalera"}
+             ] = response
+    end
+  end
 end
