@@ -77,9 +77,18 @@ defmodule NflRushing.PlayersTest do
       player2 = insert(:player, %{name: "Joe Doe", total_yards: 202.0})
       player3 = insert(:player, %{name: "Sebastian Edgard", total_yards: 198.0})
 
-      result = Players.all(%{"order_by" => "total_yards"})
+      field = draw_ordered_field()
 
-      assert [^player3, ^player1, ^player2] = result
+      expected = sort_players_by_field([player1, player2, player3], field)
+      result = Players.all(%{"order_by" => field})
+
+      assert ^expected = result
     end
+  end
+
+  def draw_ordered_field(), do: Enum.random(["total_yards", "longest_rush", "total_touchdowns"])
+
+  def sort_players_by_field(players, field) do
+    Enum.sort_by(players, &Map.get(&1, String.to_existing_atom(field)))
   end
 end
