@@ -2,6 +2,7 @@ defmodule NflRushing.PlayersTest do
   use NflRushing.DataCase, async: true
 
   import NflRushing.Factory
+  import Ecto.Query, only: [from: 2]
 
   alias NflRushing.{Player, Players}
 
@@ -17,6 +18,17 @@ defmodule NflRushing.PlayersTest do
 
       assert 3 == Enum.count(result)
       assert [%Player{}, %Player{}, %Player{}] = result
+    end
+  end
+
+  describe "list_all/1" do
+    test "when receives a queryable with values, should return all the values" do
+      insert_list(3, :player, %{name: "Joseph Due"})
+
+      player = insert(:player, %{name: "John Doe"})
+      query = from p in Player, where: p.name == "John Doe"
+
+      assert [player] = Player.list_all(query)
     end
   end
 end

@@ -4,7 +4,7 @@ defmodule NflRushing.Players do
   @doc """
   It returns all players from database or return an empty list
   """
-  def list_all() do
-    Repo.all(NflRushing.Player)
+  def list_all(queryable \\ NflRushing.Player) do
+    Repo.all(queryable)
   end
 end
