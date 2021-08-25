@@ -83,19 +83,6 @@ defmodule NflRushing.PlayersTest do
     end
 
     test "when it receives a valid field to order, should order the players using the field" do
-      player1 = insert(:player, %{name: "Joe Cavalera", total_yards: 200.0})
-      player2 = insert(:player, %{name: "Joe Doe", total_yards: 202.0})
-      player3 = insert(:player, %{name: "Sebastian Edgard", total_yards: 198.0})
-
-      field = draw_ordered_field()
-
-      ordered_players = sort_players_by_field([player1, player2, player3], field)
-      result = Players.all(%{"order_by" => field})
-
-      assert ^ordered_players = result
-    end
-
-    test "when it receives an invalid field to order, it should returns the players with default ordenation" do
       player1 =
         insert(:player, %{
           name: "Joe Cavalera",
@@ -120,15 +107,49 @@ defmodule NflRushing.PlayersTest do
           total_touchdowns: 3
         })
 
+      field = draw_ordered_field()
+
+      ordered_players = sort_players_by_field([player1, player2, player3], field)
+      result = Players.all(%{"order_by" => field, "direction" => "asc"})
+
+      assert ^ordered_players = result
+    end
+
+    test "when it receives a valid field to order and a direction, should order using both data" do
+      player1 = insert(:player, %{name: "Joe Cavalera", total_yards: 200.0})
+      player2 = insert(:player, %{name: "Joe Doe", total_yards: 202.0})
+      player3 = insert(:player, %{name: "Sebastian Edgard", total_yards: 198.0})
+
+      result = Players.all(%{"order_by" => "total_yards", "direction" => "desc"})
+
+      assert [^player2, ^player1, ^player3] = result
+    end
+
+    test "when it receives an invalid field to order, it should returns the players with default ordenation" do
+      player1 = insert(:player, %{name: "Joe Cavalera", total_yards: 200.0})
+      player2 = insert(:player, %{name: "Joe Doe", total_yards: 202.0})
+      player3 = insert(:player, %{name: "Sebastian Edgard", total_yards: 198.0})
+
       result = Players.all(%{"order_by" => "name"})
 
       assert [^player1, ^player2, ^player3] = result
+    end
+
+    test "when it receives an invalid field to order and a direction, it should returns the players with default ordenation but use the direction specified" do
+      player1 = insert(:player, %{name: "Joe Cavalera", total_yards: 200.0})
+      player2 = insert(:player, %{name: "Joe Doe", total_yards: 202.0})
+      player3 = insert(:player, %{name: "Sebastian Edgard", total_yards: 198.0})
+
+      result = Players.all(%{"order_by" => "name", "direction" => "desc"})
+
+      assert [^player3, ^player2, ^player1] = result
     end
   end
 
   def draw_ordered_field(), do: Enum.random(["total_yards", "longest_rush", "total_touchdowns"])
 
   def sort_players_by_field(players, field) do
-    Enum.sort_by(players, &Map.get(&1, String.to_existing_atom(field)))
+    players
+    |> Enum.sort_by(&Map.get(&1, String.to_existing_atom(field)))
   end
 end
