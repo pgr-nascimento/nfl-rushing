@@ -30,10 +30,10 @@ defmodule NflRushing.ParamsTest do
       assert %{direction: :asc} = Params.parse(params)
     end
 
-    test "with invalid order_by, remove the order" do
+    test "with invalid order_by, use the total_yards to order" do
       params = %{"order_by" => "name"}
 
-      refute Map.has_key?(Params.parse(params), :order_by)
+      assert %{order_by: :total_yards} = Params.parse(params)
     end
   end
 end

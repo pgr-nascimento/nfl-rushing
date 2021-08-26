@@ -3,7 +3,7 @@ defmodule NflRushing.Params do
   @sortable_fields ["total_yards", "longest_rush", "total_touchdowns"]
 
   defp base_params do
-    %{direction: :asc}
+    %{direction: :asc, order_by: :total_yards}
   end
 
   def parse(wire_params) do
