@@ -105,7 +105,7 @@ defmodule NflRushing.PlayersTest do
     test "order players by total_yards ascending", %{
       players: [player1, player2, player3]
     } do
-      result = Players.all(%{order_by: "total_yards", direction: "asc"})
+      result = Players.all(%{order_by: :total_yards, direction: :asc})
 
       assert [^player3, ^player1, ^player2] = result
     end
@@ -113,7 +113,7 @@ defmodule NflRushing.PlayersTest do
     test "order players by total_yards descending", %{
       players: [player1, player2, player3]
     } do
-      result = Players.all(%{order_by: "total_yards", direction: "desc"})
+      result = Players.all(%{order_by: :total_yards, direction: :desc})
 
       assert [^player2, ^player1, ^player3] = result
     end
@@ -121,7 +121,7 @@ defmodule NflRushing.PlayersTest do
     test "order players by longest_rush ascending", %{
       players: [player1, player2, player3]
     } do
-      result = Players.all(%{order_by: "longest_rush", direction: "asc"})
+      result = Players.all(%{order_by: :longest_rush, direction: :asc})
 
       assert [^player3, ^player1, ^player2] = result
     end
@@ -129,7 +129,7 @@ defmodule NflRushing.PlayersTest do
     test "order players by longest_rush descending", %{
       players: [player1, player2, player3]
     } do
-      result = Players.all(%{order_by: "longest_rush", direction: "desc"})
+      result = Players.all(%{order_by: :longest_rush, direction: :desc})
 
       assert [^player2, ^player1, ^player3] = result
     end
@@ -137,7 +137,7 @@ defmodule NflRushing.PlayersTest do
     test "order players by total_touchdowns ascending", %{
       players: [player1, player2, player3]
     } do
-      result = Players.all(%{order_by: "total_touchdowns", direction: "asc"})
+      result = Players.all(%{order_by: :total_touchdowns, direction: :asc})
 
       assert [^player3, ^player1, ^player2] = result
     end
@@ -145,7 +145,7 @@ defmodule NflRushing.PlayersTest do
     test "order players by total_touchdowns descending", %{
       players: [player1, player2, player3]
     } do
-      result = Players.all(%{order_by: "total_touchdowns", direction: "desc"})
+      result = Players.all(%{order_by: :total_touchdowns, direction: :desc})
 
       assert [^player2, ^player1, ^player3] = result
     end
