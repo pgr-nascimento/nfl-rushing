@@ -122,13 +122,13 @@ defmodule NflRushingWeb.PlayerControllerTest do
         |> json_response(:ok)
 
       assert [
+               %{"name" => "Sebastian Edgard"},
                %{"name" => "Joe Cavalera"},
-               %{"name" => "Joe Doe"},
-               %{"name" => "Sebastian Edgard"}
+               %{"name" => "Joe Doe"}
              ] = response
     end
 
-    test "when receives a invalid ordered field with direction, order the players default using the direction",
+    test "when receives a invalid ordered , order the players default using the direction",
          %{conn: conn} do
       response =
         conn
@@ -136,9 +136,9 @@ defmodule NflRushingWeb.PlayerControllerTest do
         |> json_response(:ok)
 
       assert [
-               %{"name" => "Sebastian Edgard"},
                %{"name" => "Joe Doe"},
-               %{"name" => "Joe Cavalera"}
+               %{"name" => "Joe Cavalera"},
+               %{"name" => "Sebastian Edgard"}
              ] = response
     end
   end
