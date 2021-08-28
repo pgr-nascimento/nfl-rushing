@@ -142,4 +142,36 @@ defmodule NflRushingWeb.PlayerControllerTest do
              ] = response
     end
   end
+
+  describe "GET /api/players?offset=offset&limit=limit" do
+    test "with a limit, return a limited number of players", %{conn: conn} do
+      insert(:player, %{name: "Joe Cavalera", total_yards: 200})
+      insert(:player, %{name: "Joe Doe", total_yards: 210})
+      insert(:player, %{name: "Sebastian Edgard", total_yards: 460})
+      insert(:player, %{name: "Solomon Evoe", total_yards: 270})
+      insert(:player, %{name: "Alan Duncan", total_yards: 300})
+
+      response =
+        conn
+        |> get("/api/players", limit: 2)
+        |> json_response(:ok)
+
+      assert [%{"name" => "Joe Cavalera"}, %{"name" => "Joe Doe"}] = response
+    end
+
+    test "with a limit and offset, return the playes in a paginated way", %{conn: conn} do
+      insert(:player, %{name: "Joe Cavalera", total_yards: 200})
+      insert(:player, %{name: "Joe Doe", total_yards: 210})
+      insert(:player, %{name: "Sebastian Edgard", total_yards: 460})
+      insert(:player, %{name: "Solomon Evoe", total_yards: 270})
+      insert(:player, %{name: "Alan Duncan", total_yards: 300})
+
+      response =
+        conn
+        |> get("/api/players", limit: 2, offset: 4)
+        |> json_response(:ok)
+
+      assert [%{"name" => "Sebastian Edgard"}] = response
+    end
+  end
 end
