@@ -9,9 +9,16 @@ defmodule NflRushing.ParamsTest do
     end
 
     test "with valid params, transform the keys in atom and return the new map" do
-      params = %{"name" => "test", "direction" => "asc", "order_by" => "total_yards"}
+      params = %{
+        "name" => "test",
+        "direction" => "asc",
+        "order_by" => "total_yards",
+        "limit" => 10,
+        "offset" => 20
+      }
 
-      assert %{name: "test", direction: :asc, order_by: :total_yards} = Params.parse(params)
+      assert %{name: "test", direction: :asc, order_by: :total_yards, limit: 10, offset: 20} =
+               Params.parse(params)
     end
 
     test "with valid params and invalid, transform the valid ones and return the new map" do
@@ -34,6 +41,18 @@ defmodule NflRushing.ParamsTest do
       params = %{"order_by" => "name"}
 
       assert %{order_by: :total_yards} = Params.parse(params)
+    end
+
+    test "with invalid limit, use the default limit" do
+      params = %{"limit" => "test"}
+
+      assert %{limit: 10} = Params.parse(params)
+    end
+
+    test "with invalid offset, use the default offset" do
+      params = %{"offset" => "test"}
+
+      assert %{offset: 0} = Params.parse(params)
     end
   end
 end
