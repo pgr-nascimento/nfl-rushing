@@ -9,12 +9,13 @@ defmodule NflRushing.Players do
   end
 
   @doc """
-  It returns all players from database or return an empty list
+  It returns all players from database applying filters, orders, limit and offset if receives these attributes.
   """
   def all(params) do
     base_query()
     |> filter_query(params)
     |> order_query(params)
+    |> paginate(params)
     |> Repo.all()
   end
 
@@ -29,4 +30,10 @@ defmodule NflRushing.Players do
   end
 
   defp order_query(query, _params), do: query
+
+  defp paginate(query, %{limit: limit, offset: offset}) do
+    from p in query, limit: ^limit, offset: ^offset
+  end
+
+  defp paginate(query, _params), do: query
 end

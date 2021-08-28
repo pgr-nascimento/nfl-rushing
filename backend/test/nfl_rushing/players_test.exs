@@ -24,9 +24,8 @@ defmodule NflRushing.PlayersTest do
   describe "filters" do
     test "when it receives an empty value, do not apply the filter" do
       player1 = insert(:player, %{name: "Joe Cavalera"})
-      player2 = insert(:player, %{name: "Joe Doe"})
-      player3 = insert(:player, %{name: "Sebastian Edgard"})
-
+      player2 = insert(:player, %{name: "Joe Cavalera"})
+      player3 = insert(:player, %{name: "Alan Doe"})
       result = Players.all(%{name: ""})
 
       assert [^player1, ^player2, ^player3] = result
@@ -149,6 +148,37 @@ defmodule NflRushing.PlayersTest do
       result = Players.all(%{order_by: :total_touchdowns, direction: :desc})
 
       assert [^player2, ^player1, ^player3] = result
+    end
+  end
+
+  describe "offset & limit" do
+    test "when it does not receive a limit, should returns all the players" do
+      insert_list(11, :player)
+
+      result = Players.all(%{})
+
+      assert Enum.all?(result, fn player -> %Player{} = player end)
+      assert Enum.count(result) == 11
+    end
+
+    test "when it receives a limit, should returns only the limit number of players" do
+      insert_list(20, :player)
+
+      result = Players.all(%{offset: 0, limit: 12})
+
+      assert Enum.count(result) == 12
+    end
+
+    test "when it receives an offset and limit, should return the values of the current offset page" do
+      insert_list(20, :player)
+      player1 = insert(:player, %{name: "Joe Doe"})
+      player2 = insert(:player, %{name: "Joe Cavalera"})
+      player3 = insert(:player, %{name: "Alan Doe"})
+
+      result = Players.all(%{limit: 10, offset: 20})
+
+      assert Enum.count(result) == 3
+      assert [^player1, ^player2, ^player3] = result
     end
   end
 end
