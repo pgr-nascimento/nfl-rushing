@@ -1,4 +1,4 @@
-defmodule NflRushing.Player do
+defmodule NflRushing.Players.Player do
   use Ecto.Schema
   import Ecto.Changeset
 

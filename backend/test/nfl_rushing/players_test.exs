@@ -3,7 +3,8 @@ defmodule NflRushing.PlayersTest do
 
   import NflRushing.Factory
 
-  alias NflRushing.{Player, Players}
+  alias NflRushing.Players
+  alias NflRushing.Players.Player
 
   describe "all/1" do
     test "when there is no data, should return an empty list" do

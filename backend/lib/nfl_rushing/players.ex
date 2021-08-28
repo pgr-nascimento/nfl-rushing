@@ -1,5 +1,7 @@
 defmodule NflRushing.Players do
-  alias NflRushing.{Player, Repo}
+  alias NflRushing.Repo
+  alias NflRushing.Players.Player
+
   import Ecto.Query
 
   defp base_query do

@@ -2,7 +2,7 @@ defmodule NflRushing.Factory do
   use ExMachina.Ecto, repo: NflRushing.Repo
 
   def player_factory do
-    %NflRushing.Player{
+    %NflRushing.Players.Player{
       attempts: 2,
       attempts_per_game_average: 2.0,
       average_yards_per_attempt: 3.0,

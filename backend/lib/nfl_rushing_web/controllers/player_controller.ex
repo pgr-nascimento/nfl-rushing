@@ -7,7 +7,6 @@ defmodule NflRushingWeb.PlayerController do
     players =
       params
       |> Params.parse()
-      |> IO.inspect()
       |> Players.all()
 
     render(conn, "players.json", %{players: players})
