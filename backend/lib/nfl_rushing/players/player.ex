@@ -46,6 +46,6 @@ defmodule NflRushing.Players.Player do
   def changeset(player, attrs) do
     player
     |> cast(attrs, @required_fields)
-    |> validate_required([@required_fields])
+    |> validate_required(@required_fields)
   end
 end
