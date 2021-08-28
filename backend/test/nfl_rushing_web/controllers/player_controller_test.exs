@@ -34,7 +34,7 @@ defmodule NflRushingWeb.PlayerControllerTest do
 
       response =
         conn
-        |> get("/api/players?name=")
+        |> get("/api/players", name: "")
         |> json_response(:ok)
 
       assert [
@@ -51,7 +51,7 @@ defmodule NflRushingWeb.PlayerControllerTest do
 
       response =
         conn
-        |> get("/api/players?name=joe")
+        |> get("/api/players", name: "joe")
         |> json_response(:ok)
 
       assert [%{"name" => "Joe Cavalera"}, %{"name" => "Joe Doe"}] = response
@@ -66,7 +66,7 @@ defmodule NflRushingWeb.PlayerControllerTest do
 
       response =
         conn
-        |> get("/api/players?name=oe")
+        |> get("/api/players", name: "oe")
         |> json_response(:ok)
 
       assert [%{"name" => "Joe Cavalera"}, %{"name" => "Joe Doe"}, %{"name" => "Solomon Evoe"}] =
@@ -105,7 +105,7 @@ defmodule NflRushingWeb.PlayerControllerTest do
     } do
       response =
         conn
-        |> get("/api/players?order_by=total_yards&direction=desc")
+        |> get("/api/players", order_by: "total_yards", direction: "desc")
         |> json_response(:ok)
 
       assert [
@@ -118,7 +118,7 @@ defmodule NflRushingWeb.PlayerControllerTest do
     test "when receives a invalid ordered field, order the players default", %{conn: conn} do
       response =
         conn
-        |> get("/api/players?order_by=name")
+        |> get("/api/players", order_by: "name")
         |> json_response(:ok)
 
       assert [
@@ -128,11 +128,11 @@ defmodule NflRushingWeb.PlayerControllerTest do
              ] = response
     end
 
-    test "when receives a invalid ordered , order the players default using the direction",
+    test "when receives a invalid ordered, order the players default using the direction",
          %{conn: conn} do
       response =
         conn
-        |> get("/api/players?order_by=name&direction=desc")
+        |> get("/api/players", order_by: "name", direction: "desc")
         |> json_response(:ok)
 
       assert [
