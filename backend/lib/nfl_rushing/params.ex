@@ -28,8 +28,29 @@ defmodule NflRushing.Params do
     Map.put(params, :limit, limit)
   end
 
+  defp compose_params({"limit", wire_limit}, params) when is_binary(wire_limit) do
+    case Integer.parse(wire_limit) do
+      {limit, _} ->
+        compose_params({"limit", limit}, params)
+
+      :error ->
+        params
+    end
+  end
+
   defp compose_params({"offset", offset}, params) when is_integer(offset) and offset > 0 do
     Map.put(params, :offset, offset)
+  end
+
+  defp compose_params({"offset", wire_offset}, params)
+       when is_binary(wire_offset) and wire_offset > 0 do
+    case Integer.parse(wire_offset) do
+      {offset, _} ->
+        compose_params({"offset", offset}, params)
+
+      :error ->
+        params
+    end
   end
 
   defp compose_params(_wire_params, params), do: params

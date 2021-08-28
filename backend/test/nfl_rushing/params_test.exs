@@ -13,8 +13,8 @@ defmodule NflRushing.ParamsTest do
         "name" => "test",
         "direction" => "asc",
         "order_by" => "total_yards",
-        "limit" => 10,
-        "offset" => 20
+        "limit" => "10",
+        "offset" => "20"
       }
 
       assert %{name: "test", direction: :asc, order_by: :total_yards, limit: 10, offset: 20} =
@@ -51,6 +51,12 @@ defmodule NflRushing.ParamsTest do
 
     test "with invalid offset, use the default offset" do
       params = %{"offset" => "test"}
+
+      assert %{offset: 0} = Params.parse(params)
+    end
+
+    test "with negative offset, use the default offset" do
+      params = %{"offset" => "-1"}
 
       assert %{offset: 0} = Params.parse(params)
     end
