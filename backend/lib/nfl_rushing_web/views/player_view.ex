@@ -30,4 +30,14 @@ defmodule NflRushingWeb.PlayerView do
       %{params | offset: 0}
     end
   end
+
+  def next_page(%{offset: offset, limit: limit} = params, total) do
+    new_offset = offset + limit
+
+    if new_offset <= total - limit do
+      %{params | offset: new_offset}
+    else
+      %{params | offset: total - limit}
+    end
+  end
 end
