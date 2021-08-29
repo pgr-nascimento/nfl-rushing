@@ -5,24 +5,29 @@ defmodule NflRushingWeb.PlayerControllerTest do
 
   describe "GET /api/players" do
     test "when there is not players, should return an empty list", %{conn: conn} do
-      response =
+      document =
         conn
-        |> get("api/players")
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index))
+        |> html_response(:ok)
+        |> Floki.parse_document!()
 
-      assert [] == response
+      assert "" == Floki.find(document, "tbody") |> Floki.text()
     end
 
     test "list all players registered on database", %{conn: conn} do
       insert(:player, %{name: "Joe Cavalera"})
       insert(:player, %{name: "Joe Doe"})
 
-      response =
+      [first_player_name, second_player_name] =
         conn
-        |> get("/api/players")
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index))
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=player]")
+        |> Enum.map(&Floki.text/1)
 
-      assert [%{"name" => "Joe Cavalera"}, %{"name" => "Joe Doe"}] = response
+      assert first_player_name =~ "Joe Cavalera"
+      assert second_player_name =~ "Joe Doe"
     end
   end
 
@@ -32,16 +37,17 @@ defmodule NflRushingWeb.PlayerControllerTest do
       insert(:player, %{name: "Joe Doe"})
       insert(:player, %{name: "Sebastian Edgard"})
 
-      response =
+      [first_player_name, second_player_name, third_player_name] =
         conn
-        |> get("/api/players", name: "")
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index))
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=player]")
+        |> Enum.map(&Floki.text/1)
 
-      assert [
-               %{"name" => "Joe Cavalera"},
-               %{"name" => "Joe Doe"},
-               %{"name" => "Sebastian Edgard"}
-             ] = response
+      assert first_player_name =~ "Joe Cavalera"
+      assert second_player_name =~ "Joe Doe"
+      assert third_player_name =~ "Sebastian Edgard"
     end
 
     test "list all players with the same name corresponding to the query string", %{conn: conn} do
@@ -49,12 +55,16 @@ defmodule NflRushingWeb.PlayerControllerTest do
       insert(:player, %{name: "Joe Doe"})
       insert(:player, %{name: "Sebastian Edgard"})
 
-      response =
+      [first_player_name, second_player_name] =
         conn
-        |> get("/api/players", name: "joe")
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index), name: "joe")
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=player]")
+        |> Enum.map(&Floki.text/1)
 
-      assert [%{"name" => "Joe Cavalera"}, %{"name" => "Joe Doe"}] = response
+      assert first_player_name =~ "Joe Cavalera"
+      assert second_player_name =~ "Joe Doe"
     end
 
     test "list all players with matches the partial name on the query string", %{conn: conn} do
@@ -64,13 +74,17 @@ defmodule NflRushingWeb.PlayerControllerTest do
       insert(:player, %{name: "Solomon Evoe"})
       insert(:player, %{name: "Alan Duncan"})
 
-      response =
+      [first_player_name, second_player_name, third_player_name] =
         conn
-        |> get("/api/players", name: "oe")
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index), name: "oe")
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=player]")
+        |> Enum.map(&Floki.text/1)
 
-      assert [%{"name" => "Joe Cavalera"}, %{"name" => "Joe Doe"}, %{"name" => "Solomon Evoe"}] =
-               response
+      assert first_player_name =~ "Joe Cavalera"
+      assert second_player_name =~ "Joe Doe"
+      assert third_player_name =~ "Solomon Evoe"
     end
   end
 
@@ -103,43 +117,46 @@ defmodule NflRushingWeb.PlayerControllerTest do
     test "when receives a valid ordered field and direction, order the players using they", %{
       conn: conn
     } do
-      response =
+      [first_player_name, second_player_name, third_player_name] =
         conn
-        |> get("/api/players", order_by: "total_yards", direction: "desc")
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index), order_by: "total_yards", direction: "desc")
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=player]")
+        |> Enum.map(&Floki.text/1)
 
-      assert [
-               %{"name" => "Joe Doe"},
-               %{"name" => "Joe Cavalera"},
-               %{"name" => "Sebastian Edgard"}
-             ] = response
+      assert first_player_name =~ "Joe Doe"
+      assert second_player_name =~ "Joe Cavalera"
+      assert third_player_name =~ "Sebastian Edgard"
     end
 
     test "when receives a invalid ordered field, order the players default", %{conn: conn} do
-      response =
+      [first_player_name, second_player_name, third_player_name] =
         conn
-        |> get("/api/players", order_by: "name")
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index), order_by: "name", direction: "desc")
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=player]")
+        |> Enum.map(&Floki.text/1)
 
-      assert [
-               %{"name" => "Sebastian Edgard"},
-               %{"name" => "Joe Cavalera"},
-               %{"name" => "Joe Doe"}
-             ] = response
+      assert first_player_name =~ "Joe Doe"
+      assert second_player_name =~ "Joe Cavalera"
+      assert third_player_name =~ "Sebastian Edgard"
     end
 
-    test "when receives a invalid ordered, order the players default using the direction",
+    test "when receives a invalid direction, order the players using the default direction",
          %{conn: conn} do
-      response =
+      [first_player_name, second_player_name, third_player_name] =
         conn
-        |> get("/api/players", order_by: "name", direction: "desc")
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index), order_by: "total_yards", direction: "updown")
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=player]")
+        |> Enum.map(&Floki.text/1)
 
-      assert [
-               %{"name" => "Joe Doe"},
-               %{"name" => "Joe Cavalera"},
-               %{"name" => "Sebastian Edgard"}
-             ] = response
+      assert first_player_name =~ "Sebastian Edgard"
+      assert second_player_name =~ "Joe Cavalera"
+      assert third_player_name =~ "Joe Doe"
     end
   end
 
@@ -151,12 +168,16 @@ defmodule NflRushingWeb.PlayerControllerTest do
       insert(:player, %{name: "Solomon Evoe", total_yards: 270})
       insert(:player, %{name: "Alan Duncan", total_yards: 300})
 
-      response =
+      [first_player_name, second_player_name] =
         conn
-        |> get("/api/players", limit: 2)
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index), limit: 2)
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=player]")
+        |> Enum.map(&Floki.text/1)
 
-      assert [%{"name" => "Joe Cavalera"}, %{"name" => "Joe Doe"}] = response
+      assert first_player_name =~ "Joe Cavalera"
+      assert second_player_name =~ "Joe Doe"
     end
 
     test "with a limit and offset, return the playes in a paginated way", %{conn: conn} do
@@ -166,12 +187,15 @@ defmodule NflRushingWeb.PlayerControllerTest do
       insert(:player, %{name: "Solomon Evoe", total_yards: 270})
       insert(:player, %{name: "Alan Duncan", total_yards: 300})
 
-      response =
+      [first_player_name] =
         conn
-        |> get("/api/players", limit: 2, offset: 4)
-        |> json_response(:ok)
+        |> get(Routes.player_path(conn, :index), limit: 2, offset: 4)
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=player]")
+        |> Enum.map(&Floki.text/1)
 
-      assert [%{"name" => "Sebastian Edgard"}] = response
+      assert first_player_name =~ "Sebastian Edgard"
     end
   end
 end
