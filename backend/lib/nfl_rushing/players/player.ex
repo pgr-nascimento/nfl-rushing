@@ -17,7 +17,8 @@ defmodule NflRushing.Players.Player do
     :first_down_percentage,
     :twenty_plus_yards,
     :forty_plus_yards,
-    :total_fumbles
+    :total_fumbles,
+    :longest_rush_touchdown
   ]
 
   @derive {Jason.Encoder, only: @required_fields}
@@ -30,6 +31,7 @@ defmodule NflRushing.Players.Player do
     field :first_downs, :integer
     field :forty_plus_yards, :integer
     field :longest_rush, :integer
+    field :longest_rush_touchdown, :boolean
     field :name, :string
     field :position, :string
     field :team_acronym, :string
