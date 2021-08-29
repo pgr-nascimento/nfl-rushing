@@ -1,0 +1,60 @@
+<table>
+  <thead>
+    <%= for header <- headers() do %>
+      <th>
+        <%= header %>
+      </th>
+      <% end %>
+  </thead>
+  <tbody>
+    <%= for player <- @players do %>
+      <tr>
+        <td name="player">
+          <%= player.name %>
+        </td>
+        <td>
+          <%= player.team_acronym %>
+        </td>
+        <td>
+          <%= player.position %>
+        </td>
+        <td>
+          <%= player.attempts %>
+        </td>
+        <td>
+          <%= player.attempts_per_game_average %>
+        </td>
+        <td>
+          <%= player.total_yards %>
+        </td>
+        <td>
+          <%= player.average_yards_per_attempt %>
+        </td>
+        <td>
+          <%= player.yards_per_game %>
+        </td>
+        <td>
+          <%= player.total_touchdowns %>
+        </td>
+        <td>
+          <%= player.longest_rush %>
+        </td>
+        <td>
+          <%= player.first_downs %>
+        </td>
+        <td>
+          <%= player.first_down_percentage %>
+        </td>
+        <td>
+          <%= player.twenty_plus_yards %>
+        </td>
+        <td>
+          <%= player.forty_plus_yards %>
+        </td>
+        <td>
+          <%= player.total_fumbles %>
+        </td>
+      </tr>
+      <% end %>
+  </tboddy>
+</table>
