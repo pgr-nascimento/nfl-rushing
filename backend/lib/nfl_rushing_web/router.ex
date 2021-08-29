@@ -1,15 +1,28 @@
 defmodule NflRushingWeb.Router do
   use NflRushingWeb, :router
 
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_flash
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+  end
+
   pipeline :api do
     plug :accepts, ["json"]
   end
 
-  scope "/api", NflRushingWeb do
-    pipe_through(:api)
+  scope "/", NflRushingWeb do
+    pipe_through :browser
 
     get "/players", PlayerController, :index
   end
+
+  # Other scopes may use custom stacks.
+  # scope "/api", NflRushingWeb do
+  #   pipe_through :api
+  # end
 
   # Enables LiveDashboard only for development
   #
@@ -22,7 +35,7 @@ defmodule NflRushingWeb.Router do
     import Phoenix.LiveDashboard.Router
 
     scope "/" do
-      pipe_through [:fetch_session, :protect_from_forgery]
+      pipe_through :browser
       live_dashboard "/dashboard", metrics: NflRushingWeb.Telemetry
     end
   end

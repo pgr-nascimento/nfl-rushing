@@ -13,10 +13,10 @@ config :nfl_rushing,
 # Configures the endpoint
 config :nfl_rushing, NflRushingWeb.Endpoint,
   url: [host: "localhost"],
-  secret_key_base: "GNnxfKJ/+o12XwvhjuQI08xGyvZS+BgQfTTnHmFKt6FEUIGqG0w1s896HYBJvs+q",
-  render_errors: [view: NflRushingWeb.ErrorView, accepts: ~w(json), layout: false],
+  render_errors: [view: NflRushingWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: NflRushing.PubSub,
-  live_view: [signing_salt: "wngGKaN+"]
+  live_view: [signing_salt: "wngGKaN+"],
+  secret_key_base: "uMhqzjg6AOSPxPGduNR51Jm4GmHoqi8CCU9HvR5xgFv0lIitcUJgmOsRzK9MShFx"
 
 # Configures Elixir's Logger
 config :logger, :console,
