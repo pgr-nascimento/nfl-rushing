@@ -1,1 +1,10 @@
+<%= form_for @conn, Routes.player_path(@conn, :index), [method: :get], fn f -> %>
+  <%= search_input f, :name, placeholder: "Player's name" %>
+  <%= submit "Search" %>
+<% end %>
+
 <%= render("table.html", players: @players) %>
+
+<%= link("previous", to: get_path(:previous_page, @user_params, @total_players, @conn), method: :get) %>
+
+<%= link("next", to: get_path(:next_page, @user_params, @total_players, @conn), method: :get) %>
