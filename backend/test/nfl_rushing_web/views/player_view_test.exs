@@ -1,4 +1,4 @@
-defmodule NflRushingWeb.ErrorViewTest do
+defmodule NflRushingWeb.PlayerViewTest do
   use NflRushingWeb.ConnCase, async: true
 
   alias NflRushingWeb.PlayerView
@@ -47,18 +47,11 @@ defmodule NflRushingWeb.ErrorViewTest do
       assert %{limit: 10, offset: 40} = PlayerView.next_page(params, total)
     end
 
-    test "It should returns total minus the limit, if the offset would be greather than total minus limit" do
-      params = %{limit: 10, offset: 40}
-      total = 50
+    test "It should returns total minus the limit, if the offset would be equal or greather than total" do
+      params = %{limit: 10, offset: 57}
+      total = 57
 
-      assert %{limit: 10, offset: 40} = PlayerView.next_page(params, total)
-    end
-
-    test "It should returns total minus the limit, if the offset would be greather than total" do
-      params = %{limit: 10, offset: 41}
-      total = 50
-
-      assert %{limit: 10, offset: 40} = PlayerView.next_page(params, total)
+      assert %{limit: 10, offset: 47} = PlayerView.next_page(params, total)
     end
   end
 end
