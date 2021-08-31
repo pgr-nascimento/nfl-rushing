@@ -6,6 +6,32 @@ defmodule NflRushing.PlayersTest do
   alias NflRushing.Players
   alias NflRushing.Players.Player
 
+  describe "count_players/1" do
+    test "when there is no data, should return zero" do
+      assert 0 == Players.count_players(%{})
+    end
+
+    test "when there is data and no filters, should return the total of players in the database" do
+      insert_list(15, :player)
+
+      assert 15 == Players.count_players(%{})
+    end
+
+    test "when it receives an empty value, do not apply the filter" do
+      insert_list(15, :player)
+
+      assert 15 == Players.count_players(%{name: ""})
+    end
+
+    test "when it receives a value, and that is a complete name, it should returns just the players that matches." do
+      insert(:player, %{name: "Joe Cavalera"})
+      insert(:player, %{name: "Joe Doe"})
+      insert(:player, %{name: "Sebastian Edgard"})
+
+      assert 2 == Players.count_players(%{name: "Joe"})
+    end
+  end
+
   describe "all/1" do
     test "when there is no data, should return an empty list" do
       assert [] == Players.all(%{})

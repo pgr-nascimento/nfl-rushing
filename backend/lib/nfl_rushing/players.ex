@@ -8,6 +8,13 @@ defmodule NflRushing.Players do
     from(p in Player)
   end
 
+  def count_players(params) do
+    base_query()
+    |> count_query
+    |> filter_query(params)
+    |> Repo.one()
+  end
+
   @doc """
   It returns all players from database applying filters, orders, limit and offset if receives these attributes.
   """
@@ -17,6 +24,10 @@ defmodule NflRushing.Players do
     |> order_query(params)
     |> paginate(params)
     |> Repo.all()
+  end
+
+  defp count_query(query) do
+    from(p in query, select: count(p.id))
   end
 
   defp filter_query(query, %{name: name}) do
