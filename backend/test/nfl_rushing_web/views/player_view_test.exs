@@ -54,4 +54,23 @@ defmodule NflRushingWeb.PlayerViewTest do
       assert %{limit: 10, offset: 47} = PlayerView.next_page(params, total)
     end
   end
+
+  describe "get_path/4" do
+    test "With :previous_page, should not change the URL when the offset is zero" do
+      params = %{offset: 0}
+
+      total = 10
+
+      assert "#" == PlayerView.get_path(:previous_page, params, total, NflRushingWeb.ConnCase)
+    end
+
+    test "With :previous_page, should reduce the offset when the offset is not zero" do
+      params = %{offset: 30, limit: 10}
+
+      total = 40
+
+      assert "/players?offset=20&limit=10" ==
+               PlayerView.get_path(:previous_page, params, total, NflRushingWeb.Endpoint)
+    end
+  end
 end
