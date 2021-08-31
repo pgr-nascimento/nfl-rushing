@@ -4,11 +4,10 @@ defmodule NflRushingWeb.PlayerController do
   alias NflRushing.{Params, Players}
 
   def index(conn, params) do
-    players =
-      params
-      |> Params.parse()
-      |> Players.all()
+    user_params = Params.parse(params)
+    total = Players.count_players(user_params)
+    players = Players.all(user_params)
 
-    render(conn, "players.json", %{players: players})
+    render(conn, "index.html", %{players: players, user_params: user_params, total_players: total})
   end
 end
