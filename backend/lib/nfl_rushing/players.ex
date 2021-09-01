@@ -4,10 +4,24 @@ defmodule NflRushing.Players do
 
   import Ecto.Query
 
+  @typedoc """
+    * name - used to filter the player name, accepts partial words (the fn will filter using LIKE %name%)
+    * order_by - order by a specific field
+    * direction - Ascending (asc) or Desceding (desc)
+    * limit - How much players Ecto should returns
+    * offset - Used to paginate the players
+  """
+  @type params :: %{name: String.t(), order_by: String.t(), direction: String.t(), limit: number(), offset: number()}
+
   defp base_query do
     from(p in Player)
   end
 
+  @doc """
+  This fn receives the params and count the total of players in the database, if a name is receibed in params map, the fn will filter
+  and do the count after it.
+  """
+  @spec count_players(params()) :: integer()
   def count_players(params) do
     base_query()
     |> count_query
@@ -16,8 +30,9 @@ defmodule NflRushing.Players do
   end
 
   @doc """
-  It returns all players from database applying filters, orders, limit and offset if receives these attributes.
+  This fn receives the params, apply the filter, order the query and paginate (apply the limit and offset) when the keys exists in params
   """
+  @spec all(params()) :: list(Player.t())
   def all(params) do
     base_query()
     |> filter_query(params)
