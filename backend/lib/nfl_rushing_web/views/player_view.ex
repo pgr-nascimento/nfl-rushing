@@ -41,18 +41,12 @@ defmodule NflRushingWeb.PlayerView do
     end
   end
 
-  def get_path(:previous_page, %{offset: 0}, _total, _conn), do: "#"
+  def show_pagination_link?(:previous_page, %{offset: 0}, _total_players), do: false
+  def show_pagination_link?(:previous_page, _params, _total_players), do: true
 
-  def get_path(:previous_page, params, _total, conn),
-    do: Routes.player_path(conn, :index, previous_page(params))
-
-  def get_path(:next_page, %{offset: offset, limit: limit} = params, total, conn) do
+  def show_pagination_link?(:next_page, %{offset: offset, limit: limit}, total_players) do
     new_offset = offset + limit
 
-    if new_offset <= total do
-      Routes.player_path(conn, :index, next_page(params, total))
-    else
-      "#"
-    end
+    if new_offset <= total_players, do: true, else: false
   end
 end

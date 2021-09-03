@@ -5,6 +5,10 @@
 
 <%= render("table.html", players: @players) %>
 
-<%= link("previous", to: get_path(:previous_page, @user_params, @total_players, @conn), method: :get) %>
+<%= if show_pagination_link?(:previous_page, @user_params, @total_players) do %>
+  <%= link("previous", to: Routes.player_path(@conn, :index, previous_page(@user_params)), method: :get) %>
+<% end %>
 
-<%= link("next", to: get_path(:next_page, @user_params, @total_players, @conn), method: :get) %>
+<%= if show_pagination_link?(:next_page, @user_params, @total_players) do%>
+  <%= link("next", to:  Routes.player_path(@conn, :index, next_page(@user_params, @total_players)), method: :get) %>
+<% end %>
