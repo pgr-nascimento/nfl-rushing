@@ -1,6 +1,12 @@
 defmodule NflRushingWeb.PlayerView do
   use NflRushingWeb, :view
 
+  import Phoenix.HTML.Link, only: [link: 2]
+
+  @ordered_headers ["Yds", "Lng", "TD"]
+
+  @sortable_columns %{"Yds" => "total_yards", "Lng" => "longest_rush", "TD" => "total_touchdowns"}
+
   def headers do
     [
       "Player",
@@ -48,5 +54,31 @@ defmodule NflRushingWeb.PlayerView do
     new_offset = offset + limit
 
     if new_offset <= total_players, do: true, else: false
+  end
+
+  def build_order_link(header, params, conn)
+      when header in @ordered_headers do
+    order_by = Map.get(@sortable_columns, header)
+
+    link(header, to: order_route(params, order_by, conn), method: :get)
+  end
+
+  def build_order_link(header, _params, _conn), do: header
+
+  defp toggle_direction(:asc), do: "desc"
+  defp toggle_direction(:desc), do: "asc"
+  defp toggle_direction(_direction), do: "desc"
+
+  defp order_route(params, new_order_by, conn) do
+    new_params =
+      %{
+        direction: toggle_direction(Map.get(params, :direction)),
+        order_by: new_order_by,
+        name: Map.get(params, :name)
+      }
+      |> Enum.reject(fn {_key, value} -> value == nil end)
+      |> Enum.into(%{})
+
+    Routes.player_path(conn, :index, new_params)
   end
 end

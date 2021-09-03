@@ -2,7 +2,7 @@
   <thead>
     <%= for header <- headers() do %>
       <th>
-        <%= header %>
+        <%= build_order_link(header, @user_params, @conn) %>
       </th>
       <% end %>
   </thead>
@@ -56,5 +56,5 @@
         </td>
       </tr>
       <% end %>
-  </tboddy>
+        </tboddy>
 </table>

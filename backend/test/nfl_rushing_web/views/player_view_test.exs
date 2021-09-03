@@ -2,6 +2,7 @@ defmodule NflRushingWeb.PlayerViewTest do
   use NflRushingWeb.ConnCase, async: true
 
   alias NflRushingWeb.PlayerView
+  alias Phoenix.HTML
 
   describe "headers/0" do
     test "It should returns the content of the headers from player's table" do
@@ -86,6 +87,55 @@ defmodule NflRushingWeb.PlayerViewTest do
 
       assert PlayerView.show_pagination_link?(:next_page, params, total)
     end
+  end
+
+  describe "build_order_link/3" do
+    test "when the header is not a orderable link, it should returns the header name" do
+      header = "Player"
+
+      assert ^header = PlayerView.build_order_link(header, %{}, NflRushingWeb.Endpoint)
+    end
+
+    test "when the header is a orderable link, it should returns a link with the header" do
+      {order_by_column, header} =
+        Enum.random([{"total_yards", "Yds"}, {"longest_rush", "Lng"}, {"total_touchdowns", "TD"}])
+
+      query_string = "order_by=#{order_by_column}"
+
+      result =
+        Phoenix.HTML.safe_to_string(
+          PlayerView.build_order_link(header, %{}, NflRushingWeb.Endpoint)
+        )
+
+      assert result =~ query_string
+    end
+
+    test "when the header is a orderable link and has a filter, should keep the filter in the query string" do
+      header = "TD"
+
+      query_string_name = "name=joe"
+      query_string_order = "order_by=total_touchdowns"
+
+      result =
+        header
+        |> PlayerView.build_order_link(%{name: "joe"}, NflRushingWeb.Endpoint)
+        |> HTML.safe_to_string()
+
+      assert result =~ query_string_name
+      assert result =~ query_string_order
+    end
+
+    test "when the header is a orderable link and has a direction, should toggle the direction in the query string" do
+      header = "Lng"
+
+      query_string_direction = "direction=desc"
+
+      result =
+        header
+        |> PlayerView.build_order_link(%{direction: :asc}, NflRushingWeb.Endpoint)
+        |> HTML.safe_to_string()
+
+      assert result =~ query_string_direction
     end
   end
 end
