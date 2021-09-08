@@ -58,6 +58,6 @@
           <%= player.total_fumbles %>
         </td>
       </tr>
-      <% end %>
+    <% end %>
   </tbody>
 </table>
