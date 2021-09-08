@@ -4,7 +4,7 @@ defmodule NflRushing.PlayersTest do
   import NflRushing.Factory
 
   alias NflRushing.Players
-  alias NflRushing.Players.Player
+  alias NflRushing.Players.{Export, Player}
 
   describe "count_players/1" do
     test "when there is no data, should return zero" do
@@ -205,6 +205,35 @@ defmodule NflRushing.PlayersTest do
 
       assert Enum.count(result) == 3
       assert [^player1, ^player2, ^player3] = result
+    end
+  end
+
+  describe "export_csv/1" do
+    test "when there is no data, should return an empty list" do
+      assert [] == Players.export_csv(%{})
+    end
+
+    test "when there is data and no filters, should return all players" do
+      players =
+        insert_list(3, :player)
+        |> Enum.map(&Export.build_player/1)
+
+      result = Players.export_csv(%{})
+
+      assert 3 == Enum.count(result)
+      assert ^players = result
+    end
+
+    test "when it receives a name to filter, it should returns just the players that matches." do
+      player1 = insert(:player, %{name: "Joe Cavalera"})
+      player2 = insert(:player, %{name: "Joe Doe"})
+      insert(:player, %{name: "Sebastian Edgard"})
+
+      result = Players.export_csv(%{name: "Joe"})
+
+      players = Enum.map([player1, player2], &Export.build_player/1)
+
+      assert ^players = result
     end
   end
 end

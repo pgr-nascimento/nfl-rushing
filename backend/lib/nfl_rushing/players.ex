@@ -1,6 +1,6 @@
 defmodule NflRushing.Players do
   alias NflRushing.Repo
-  alias NflRushing.Players.Player
+  alias NflRushing.Players.{Export, Player}
 
   import Ecto.Query
 
@@ -24,6 +24,14 @@ defmodule NflRushing.Players do
     |> order_query(params)
     |> paginate(params)
     |> Repo.all()
+  end
+
+  def export_csv(params) do
+    base_query()
+    |> filter_query(params)
+    |> order_query(params)
+    |> Repo.all()
+    |> Enum.map(&Export.build_player/1)
   end
 
   defp count_query(query) do
