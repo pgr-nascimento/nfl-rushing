@@ -3,6 +3,7 @@
   <%= submit "Search" %>
 <% end %>
 
+
 <%= render("table.html", players: @players, user_params: @user_params, conn: @conn) %>
 
 <%= if show_pagination_link?(:previous_page, @user_params, @total_players) do %>
@@ -12,3 +13,7 @@
 <%= if show_pagination_link?(:next_page, @user_params, @total_players) do%>
   <%= link("next", to:  Routes.player_path(@conn, :index, next_page(@user_params, @total_players)), method: :get) %>
 <% end %>
+
+<div style="float: right">
+ <img width="20px" src="<%= Routes.static_path(@conn, "/images/ball.svg") %>"/> <strong>= The player has scored a touchdown</strong>
+</div>
