@@ -1,6 +1,8 @@
 defmodule NflRushingWeb.PlayerView do
   use NflRushingWeb, :view
 
+  alias NflRushing.Players.Player
+
   import Phoenix.HTML.Link, only: [link: 2]
 
   @ordered_headers ["Yds", "Lng", "TD"]
@@ -80,5 +82,13 @@ defmodule NflRushingWeb.PlayerView do
       |> Enum.into(%{})
 
     Routes.player_path(conn, :index, new_params)
+  end
+
+  @doc """
+  This fn check the longest_rush_touchdown column and return its value. Just to give a
+  better idiomatic name to the column.
+  """
+  def scored_touchdown?(%Player{longest_rush_touchdown: longest_rush_touchdown}) do
+    longest_rush_touchdown
   end
 end

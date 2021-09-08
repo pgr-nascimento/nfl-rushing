@@ -4,6 +4,8 @@ defmodule NflRushingWeb.PlayerViewTest do
   alias NflRushingWeb.PlayerView
   alias Phoenix.HTML
 
+  import NflRushing.Factory
+
   describe "headers/0" do
     test "It should returns the content of the headers from player's table" do
       assert [
@@ -136,6 +138,20 @@ defmodule NflRushingWeb.PlayerViewTest do
         |> HTML.safe_to_string()
 
       assert result =~ query_string_direction
+    end
+  end
+
+  describe "scored_touchdown?/1" do
+    test "when longest_rush_touchdown is false, it should returns false" do
+      player = insert(:player, %{longest_rush_touchdown: false})
+
+      assert false == PlayerView.scored_touchdown?(player)
+    end
+
+    test "when longest_rush_touchdown is true, it should returns true" do
+      player = insert(:player, %{longest_rush_touchdown: true})
+
+      assert true == PlayerView.scored_touchdown?(player)
     end
   end
 end
