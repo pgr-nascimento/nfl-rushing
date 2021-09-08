@@ -10,6 +10,7 @@ defmodule NflRushing.Factory do
       first_down_percentage: 2.2,
       forty_plus_yards: 2,
       longest_rush: 7,
+      longest_rush_touchdown: false,
       name: "Joe Banyard",
       position: "RB",
       team_acronym: "JAX",

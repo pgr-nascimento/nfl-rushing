@@ -29,6 +29,26 @@ defmodule NflRushingWeb.PlayerControllerTest do
       assert first_player_name =~ "Joe Cavalera"
       assert second_player_name =~ "Joe Doe"
     end
+
+    test "when the player scored a touchdown on its longest_rush, shows a ball image", %{
+      conn: conn
+    } do
+      insert(:player, %{name: "Joe Cavalera", longest_rush_touchdown: false})
+      insert(:player, %{name: "Joe Doe", longest_rush_touchdown: true})
+
+      [first_line, second_line] =
+        conn
+        |> get(Routes.player_path(conn, :index))
+        |> html_response(:ok)
+        |> Floki.parse_document!()
+        |> Floki.find("tbody tr td[name=longest_rush]")
+
+      first_player = Floki.raw_html(first_line)
+      second_player = Floki.raw_html(second_line)
+
+      refute first_player =~ "ball.svg"
+      assert second_player =~ "ball.svg"
+    end
   end
 
   describe "GET /api/players?name=player_name" do
