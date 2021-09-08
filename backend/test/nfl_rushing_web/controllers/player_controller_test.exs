@@ -3,6 +3,16 @@ defmodule NflRushingWeb.PlayerControllerTest do
 
   import NflRushing.Factory
 
+  describe "GET /players.csv" do
+    test "it should shows the players in csv format", %{conn: conn} do
+      csv_response =
+        conn
+        |> get(Routes.player_path(conn, :export))
+
+      assert response_content_type(csv_response, :csv)
+    end
+  end
+
   describe "GET /api/players" do
     test "when there is not players, should return an empty list", %{conn: conn} do
       document =
