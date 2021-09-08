@@ -69,6 +69,9 @@ defmodule NflRushingWeb.PlayerView do
     end
   end
 
+  @doc """
+  This fn manages if the buttons previous and next page will show on the page or not.
+  """
   def show_pagination_link?(:previous_page, %{offset: 0}, _total_players), do: false
   def show_pagination_link?(:previous_page, _params, _total_players), do: true
 
@@ -78,6 +81,11 @@ defmodule NflRushingWeb.PlayerView do
     if new_offset <= total_players, do: true, else: false
   end
 
+  @doc """
+  This fn checks which headers are able to generate a link to ordenation.
+  If the header is one of the ordered, the fn builds an html <a> tag with the name (if present),
+  "restart" the limit and offset and toggle the ordenation: if the order is ascendent, changes it to descendent and vice-versa.
+  """
   def build_order_link(header, params, conn)
       when header in @ordered_headers do
     order_by = Map.get(@sortable_columns, header)

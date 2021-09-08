@@ -1,6 +1,9 @@
 defmodule NflRushing.Players.Export do
   alias NflRushing.Players.Player
 
+  @doc """
+  This fn transform the %Player{} struct in a simple map to generate the CSV rows
+  """
   def build_player(%Player{} = player) do
     %{
       "Player" => player.name,
@@ -21,6 +24,9 @@ defmodule NflRushing.Players.Export do
     }
   end
 
+  @doc """
+  This fn build the row headers of the CSV file
+  """
   def build_headers() do
     [
       "Player",

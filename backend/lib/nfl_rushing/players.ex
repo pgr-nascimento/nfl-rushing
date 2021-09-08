@@ -11,7 +11,13 @@ defmodule NflRushing.Players do
     * limit - How much players Ecto should returns
     * offset - Used to paginate the players
   """
-  @type params :: %{name: String.t(), order_by: String.t(), direction: String.t(), limit: number(), offset: number()}
+  @type params :: %{
+          name: String.t(),
+          order_by: String.t(),
+          direction: String.t(),
+          limit: number(),
+          offset: number()
+        }
 
   defp base_query do
     from(p in Player)
@@ -41,6 +47,9 @@ defmodule NflRushing.Players do
     |> Repo.all()
   end
 
+  @doc """
+  This fn receives the params, apply the filter, order the query and transform the %Player{} in a simple map
+  """
   def export_csv(params) do
     base_query()
     |> filter_query(params)
