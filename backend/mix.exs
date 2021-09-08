@@ -47,7 +47,8 @@ defmodule NflRushing.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:ex_machina, "~> 2.7", only: :test},
       {:credo, "~> 1.5", only: [:dev, :test]},
-      {:floki, "~> 0.31.0"}
+      {:floki, "~> 0.31.0"},
+      {:csv, "~> 2.4"}
     ]
   end
 
