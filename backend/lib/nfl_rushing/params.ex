@@ -4,10 +4,34 @@ defmodule NflRushing.Params do
   @default_limit 10
   @default_offset 0
 
+
+  @typedoc """
+    * name - used to filter the player name, accepts partial words (the fn will filter using LIKE %name%)
+    * order_by - order by a specific field
+    * direction - Ascending (asc) or Desceding (desc)
+    * limit - How much players Ecto should returns
+    * offset - Used to paginate the players
+
+    %{"name" => "Joe",
+      "order_by" => total_yards" | "longest_rush" | "total_touchdowns",
+      "direction" => "asc" | "desc",
+      "limit" => "10",
+      "offset" => "0"}
+  """
+  @type wire_params :: %{String.t() => String.t(), String.t() => String.t(), String.t() => String.t(), String.t() => String.t(), String.t() => String.t()}
+  @type params :: %{name: String.t(), order_by: String.t(), direction: String.t(), limit: number(), offset: number()}
+
+
   defp base_params do
     %{direction: :asc, order_by: :total_yards, limit: @default_limit, offset: @default_offset}
   end
 
+  @doc """
+  This fn transform the params from the request with key strings, change it to atoms
+  and use the default values or the values received by query string.
+  """
+
+  @spec parse(wire_params()) :: params
   def parse(wire_params) do
     Enum.reduce(wire_params, base_params(), &compose_params/2)
   end

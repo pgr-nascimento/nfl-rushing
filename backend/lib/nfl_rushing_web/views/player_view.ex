@@ -9,6 +9,18 @@ defmodule NflRushingWeb.PlayerView do
 
   @sortable_columns %{"Yds" => "total_yards", "Lng" => "longest_rush", "TD" => "total_touchdowns"}
 
+  @type params :: %{
+          name: String.t(),
+          order_by: String.t(),
+          direction: String.t(),
+          limit: number(),
+          offset: number()
+        }
+
+  @doc """
+  This fn returns a list of the columns to show the players to the users, here we abbreviate the columns to show.
+  """
+  @spec headers :: list(String.t())
   def headers do
     [
       "Player",
@@ -29,6 +41,10 @@ defmodule NflRushingWeb.PlayerView do
     ]
   end
 
+  @doc """
+    This fn handles with the offset to send to the database which page it should show to the user
+  """
+  @spec previous_page(params()) :: params()
   def previous_page(%{offset: offset, limit: limit} = params) do
     new_offset = offset - limit
 
@@ -39,6 +55,10 @@ defmodule NflRushingWeb.PlayerView do
     end
   end
 
+  @doc """
+    This fn handles with the offset to send to the database which page it should show to the user
+  """
+  @spec next_page(params, number()) :: params()
   def next_page(%{offset: offset, limit: limit} = params, total) do
     new_offset = offset + limit
 

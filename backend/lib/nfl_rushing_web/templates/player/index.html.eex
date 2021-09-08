@@ -3,7 +3,6 @@
   <%= submit "Search" %>
 <% end %>
 
-
 <%= render("table.html", players: @players, user_params: @user_params, conn: @conn) %>
 
 <%= if show_pagination_link?(:previous_page, @user_params, @total_players) do %>
