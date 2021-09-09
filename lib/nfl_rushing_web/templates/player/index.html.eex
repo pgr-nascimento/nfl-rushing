@@ -1,8 +1,14 @@
-<%= form_for @conn, Routes.player_path(@conn, :index), [method: :get], fn f -> %>
-  <%= search_input f, :name, placeholder: "Player's name" %>
-  <%= submit "Search" %>
-<% end %>
-
+<div>
+  <div style="float: left">
+    <%= form_for @conn, Routes.player_path(@conn, :index), [method: :get], fn f -> %>
+      <%= search_input f, :name, placeholder: "Player's name" %>
+      <%= submit "Search" %>
+    <% end %>
+  </div>
+  <div style="float: right">
+    <%= link("Export to CSV", to: Routes.player_path(@conn, :export, @user_params), method: :get) %>
+  </div>
+</div>
 <%= render("table.html", players: @players, user_params: @user_params, conn: @conn) %>
 
 <%= if show_pagination_link?(:previous_page, @user_params, @total_players) do %>
