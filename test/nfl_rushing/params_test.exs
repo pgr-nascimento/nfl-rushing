@@ -4,8 +4,8 @@ defmodule NflRushing.ParamsTest do
   alias NflRushing.Params
 
   describe "parse/0" do
-    test "with empty params, should return the direction param" do
-      assert %{direction: :desc} = Params.parse(%{})
+    test "with empty params, should return the default params" do
+      assert %{direction: :desc, order_by: :total_yards, limit: 10, offset: 0} = Params.parse(%{})
     end
 
     test "with valid params, transform the keys in atom and return the new map" do
