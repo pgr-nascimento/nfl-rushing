@@ -15,7 +15,8 @@ Note: We can export the filters to the CSV too, so, we can filter the player nam
 
 * Install dependencies with `mix deps.get`
 * Create and migrate your database with `mix ecto.setup`
-* Install Node.js dependencies with `npm install` inside the `assets` directory
+* Install Node.js dependencies with `npm install` inside the `assets` directory]
+Note: Npm will show to run `npm audit fix` but there is a break change if do that and the app will not run correctly. Please, ignore it.
 * Start Phoenix endpoint with `mix phx.server`
 
 Visit [`localhost:4000`](http://localhost:4000) from your browser.
