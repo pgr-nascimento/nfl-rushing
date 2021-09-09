@@ -15,7 +15,7 @@ defmodule NflRushing.Players.Export do
       "Avg" => player.average_yards_per_attempt,
       "Yds/G" => player.yards_per_game,
       "TD" => player.total_touchdowns,
-      "Lng" => player.longest_rush,
+      "Lng" => build_longest_rush(player.longest_rush, player.longest_rush_touchdown),
       "1st" => player.first_downs,
       "1st%" => player.first_down_percentage,
       "20+" => player.twenty_plus_yards,
@@ -46,4 +46,10 @@ defmodule NflRushing.Players.Export do
       "FUM"
     ]
   end
+
+  defp build_longest_rush(longest_rush, longest_rush_touchdown)
+       when longest_rush_touchdown == true,
+       do: "#{longest_rush}T"
+
+  defp build_longest_rush(longest_rush, _longest_rush_touchdown), do: longest_rush
 end
