@@ -82,9 +82,9 @@ defmodule NflRushingWeb.PlayerView do
   end
 
   @doc """
-  This fn checks which headers are able to generate a link to ordenation.
+  This fn checks which headers are able to generate a link to ordination.
   If the header is one of the ordered, the fn builds an html <a> tag with the name (if present),
-  "restart" the limit and offset and toggle the ordenation: if the order is ascendent, changes it to descendent and vice-versa.
+  "restart" the limit and offset and toggle the ordination: if the order is ascendent, changes it to descendent and vice-versa.
   """
   def build_order_link(header, params, conn)
       when header in @ordered_headers do
