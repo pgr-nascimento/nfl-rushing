@@ -184,9 +184,9 @@ defmodule NflRushingWeb.PlayerControllerTest do
         |> Floki.find("tbody tr td[name=player]")
         |> Enum.map(&Floki.text/1)
 
-      assert first_player_name =~ "Sebastian Edgard"
+      assert first_player_name =~ "Joe Doe"
       assert second_player_name =~ "Joe Cavalera"
-      assert third_player_name =~ "Joe Doe"
+      assert third_player_name =~ "Sebastian Edgard"
     end
   end
 
@@ -206,8 +206,8 @@ defmodule NflRushingWeb.PlayerControllerTest do
         |> Floki.find("tbody tr td[name=player]")
         |> Enum.map(&Floki.text/1)
 
-      assert first_player_name =~ "Joe Cavalera"
-      assert second_player_name =~ "Joe Doe"
+      assert first_player_name =~ "Sebastian Edgard"
+      assert second_player_name =~ "Alan Duncan"
     end
 
     test "with a limit and offset, return the playes in a paginated way", %{conn: conn} do
@@ -225,7 +225,7 @@ defmodule NflRushingWeb.PlayerControllerTest do
         |> Floki.find("tbody tr td[name=player]")
         |> Enum.map(&Floki.text/1)
 
-      assert first_player_name =~ "Sebastian Edgard"
+      assert first_player_name =~ "Joe Cavalera"
     end
   end
 end

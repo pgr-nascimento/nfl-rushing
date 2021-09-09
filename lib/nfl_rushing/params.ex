@@ -33,7 +33,7 @@ defmodule NflRushing.Params do
         }
 
   defp base_params do
-    %{direction: :asc, order_by: :total_yards, limit: @default_limit, offset: @default_offset}
+    %{direction: :desc, order_by: :total_yards, limit: @default_limit, offset: @default_offset}
   end
 
   @doc """
