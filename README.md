@@ -65,3 +65,5 @@ The idea in this section is just to talk about some situations that I faced and 
 * Two queries on PlayerController: one to count the registers and the other to fetch the data.
 I'm not satisfied with this solution for this case, but I believe this is the best that I can do for this scenario (maybe Ecto.Multi?).
 Note: We need to count the total registers to create the pagination link.
+
+* There is two places that we have a list with the columns name abbreviated: in PlayerView and Player.Export, we need the first to build the content on HTML page and the other to CSV file, put one in one place is better than the current solution.  
