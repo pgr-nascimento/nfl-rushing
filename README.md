@@ -51,7 +51,9 @@ Beyond the Phoenix dependencies, I've added three more deps:
 * [CSV](https://github.com/beatrichartz/csv): This deps helped me to create the CSV file with more facility because I can define a header to the file, pass a map with the headers as keys and the lib do the job to create the rows. 
 
 * [Floki](https://github.com/philss/floki): This deps helped me to create more assertive tests related to the visualized content. 
-With it I can check part of HTML content using CSS selectors. \
+With it I can check part of HTML content using CSS selectors.
+
+* [Ex-Machina](https://github.com/thoughtbot/ex_machina): To help with the data creation for the tests.
 
 ### Possible Improvements
 
